@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">GeoQuiz</string>
+    <string name="next_button">NEXT</string>
+    <string name="prev_button">PREV</string>
+    <string name="ture_button">TURE</string>
+    <string name="false_button">FALSE</string>
+    <string name="correct_toast">你答对了！</string>
+    <string name="incorrect_toast">你答错了!</string>
+    <string name="question_oceans">czh真的真的帅吗</string>
+    <string name="question_africa">czh果然帅吗</string>
+    <string name="question_americas">czh帅帅帅</string>
+    <string name="question_asia">czh丑么？\'认真思考！</string>
+    <string name="warning_text">你确定要看？</string>
+    <string name="show_answer_button">显示答案</string>
+    <string name="cheat_button">我要作弊！</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+</resources>
