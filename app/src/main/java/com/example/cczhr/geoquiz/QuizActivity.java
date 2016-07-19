@@ -1,5 +1,6 @@
 package com.example.cczhr.geoquiz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +19,13 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mPrveButton;
     private TextView mQuestionTextView;
 
+
     private  int mCurrentIndex=0;
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT=0;
+    private boolean mIsCheater;
+
 
 
 
@@ -33,12 +38,17 @@ public class QuizActivity extends AppCompatActivity {
     private  void  checkAnswer(boolean userPressedTure){
         boolean answerIsTure=mQuestionBank[mCurrentIndex].isAnswerTrue();//返回对错
         int messageResId=0;
-
-        if(userPressedTure==answerIsTure){
-            messageResId=R.string.correct_toast;
+        if(mIsCheater){
+            messageResId=R.string.judgment_toast;
         }
-        else{
-            messageResId=R.string.incorrect_toast;
+        else {
+
+
+            if (userPressedTure == answerIsTure) {
+                messageResId = R.string.correct_toast;
+            } else {
+                messageResId = R.string.incorrect_toast;
+            }
         }
         Toast.makeText(this,messageResId,Toast.LENGTH_SHORT).show();//this的意思是在内部类显示
     }
@@ -52,7 +62,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
 
-
+//启动
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate(Bundle)called");
@@ -95,6 +105,7 @@ public class QuizActivity extends AppCompatActivity {
             public  void  onClick(View v){
                 if(mCurrentIndex<mQuestionBank.length-1) {
                     mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;//数组0123循环
+                    mIsCheater=false;
                     updateQuestion();
                 }
             }
@@ -108,19 +119,30 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        //cheat按钮
+        //cheat按钮偷看
         mCheatButton.setOnClickListener(new View.OnClickListener(){
             public  void  onClick(View v){
                // Intent i=new Intent(QuizActivity.this,CheatActivity.class);
-                boolean answerIsTrue=mQuestionBank[mCurrentIndex].isAnswerTrue();
+                boolean answerIsTrue=mQuestionBank[mCurrentIndex].isAnswerTrue();//当前题目的boolean
                 Intent i=CheatActivity.newIntent (QuizActivity.this,answerIsTrue);
-                startActivity(i);
+                startActivityForResult(i,REQUEST_CODE_CHEAT);//这里采用startActivityForResult来做跳转，此处的REQUEST_CODE_CHEAT为一个依据，可以写其他的值，但一定要>=0
+               // startActivity(i);
             }
         });
+    }
+        protected void onActivityResult (int requestCode,int resultCode,Intent data){
+            if (resultCode!= Activity.RESULT_OK){
+                return;
+            }
+            if(requestCode==REQUEST_CODE_CHEAT){
+                if(data==null){
+                    return;
+                }
+                mIsCheater=CheatActivity.wasAnswerShown(data);
+            }
+    }
 
 
-
-   }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
