@@ -23,8 +23,9 @@ public class QuizActivity extends AppCompatActivity {
     private  int mCurrentIndex=0;
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final String CHEAT_MESSAGE="message";
     private static final int REQUEST_CODE_CHEAT=0;
-    private boolean mIsCheater;
+    private boolean mIsCheater=false;
 
 
 
@@ -39,7 +40,7 @@ public class QuizActivity extends AppCompatActivity {
         boolean answerIsTure=mQuestionBank[mCurrentIndex].isAnswerTrue();//返回对错
         int messageResId=0;
         if(mIsCheater){
-            messageResId=R.string.judgment_toast;
+            messageResId=R.string.judgment_toast;//显示作弊信息
         }
         else {
 
@@ -79,6 +80,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);//0是默认值
+            mIsCheater=savedInstanceState.getBoolean(CHEAT_MESSAGE,false);
         }
         updateQuestion();
 
@@ -149,6 +151,8 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.i(TAG,mCurrentIndex+"");
         outState.putInt(KEY_INDEX, mCurrentIndex);
+        outState.putBoolean(CHEAT_MESSAGE,mIsCheater);
+
     }
 
     @Override

@@ -12,7 +12,9 @@ public class CheatActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANSWER_IS_TRUE="com.bignerdranch.android.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN="com.bignerdranch.android.geoquiz.answer_shown";
+    private static final String CHEAT="cheat";
     private boolean mAnswerIsTrue;
+    private boolean cheatResult=false;
     private TextView mAnswerTextView;
     private Button mShowAnswer;
     private void setAnswerShownResult(boolean isAnswerShown){
@@ -35,7 +37,11 @@ public class CheatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
+        if(savedInstanceState!=null){
+            cheatResult=savedInstanceState.getBoolean(CHEAT,false);
 
+        }
+        setAnswerShownResult(cheatResult);
         mAnswerIsTrue=getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE,false);//false只是默认值 改true也一样 getIntent()是获取由上一个Activity传递过来的Intent对象put是传这里的get是拿
 
 
@@ -52,8 +58,14 @@ public class CheatActivity extends AppCompatActivity {
                 else{
                     mAnswerTextView.setText(R.string.false_button);
                 }
-                setAnswerShownResult(true);
+                cheatResult=true;
+                setAnswerShownResult(cheatResult);
             }
         });
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(CHEAT,cheatResult);
     }
 }
